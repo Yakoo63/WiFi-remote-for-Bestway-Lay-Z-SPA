@@ -1,0 +1,333 @@
+{% extends "../layout.html" %}
+
+{% block header_headline_title %}
+<span data-i18n="title_home">Lay-Z-Spa Module</span>
+{% endblock %}
+
+{% block top_navigation %}
+{% run use_component("topNavigation", "index") %}
+{% endblock %}
+
+{% block content %}
+<!-- ==================== SECTION: Display Panel ==================== -->
+<section id="sectionDisplay">
+  <table>
+    <tr>
+      <td class="center">
+        <div id="display">[DSP]</div>
+      </td>
+    </tr>
+  </table>
+</section>
+
+<!-- ==================== SECTION: Temperature ==================== -->
+<section id="sectionTemperature">
+  <div class="visualapproach"></div>
+  <h2 data-i18n="section_temp_title">Temperature</h2>
+  <table class="fixed">
+    <tr>
+      <td>
+        <!-- 1) Un span dédié au texte « Actual: » ou « Réel : » -->
+        <span data-i18n="label_actual">Actual:</span>
+      </td>
+      <td><span id="atlabel">n/a</span></td>
+    </tr>
+    <tr>
+      <td>
+        <!-- 2) Un span dédié au texte « Virtual: » / « Virtuel : » -->
+        <span data-i18n="label_virtual">Virtual:</span>
+
+        <!-- 3) La bulle « ? » en dehors du span de traduction -->
+        <span class="tooltip"
+          data-text="ESP attempts to keep track of water temperature even when pump is stopped and the temperature drops in the pump while the large body of water cools slower. Uses ambient temperature. Must be calibrated before working. See SPA Config page."
+          data-i18n="[data-text]tooltip_virtual">?</span>
+      </td>
+      <td><span id="vtlabel">n/a</span></td>
+    </tr>
+    <tr>
+      <td>
+        <span data-i18n="label_target">Target:</span>
+      </td>
+      <td><span id="ttlabel">n/a</span></td>
+    </tr>
+  </table>
+</section>
+
+<!-- ==================== SECTION: Control ==================== -->
+<section id="sectionControl">
+  <h2 data-i18n="section_control_title">Control</h2>
+
+  <table id="tableSlider">
+    <tr>
+      <td><span data-i18n="control_temp">Temperature</span></td>
+      <td>
+        <input type="range" id="temp" min="20" max="40" step="1" value="20" onmouseup="sendCommand('setTarget')"
+          ontouchend="sendCommand('setTarget')">
+      </td>
+      <td style="width:10%; text-align:right" id="sliderTempVal">n/a</td>
+    </tr>
+    <tr>
+      <td><span data-i18n="control_ambient">Ambient Temperature</span></td>
+      <td>
+        <input type="range" id="amb" min="-40" max="60" step="1" value="20" onmouseup="sendCommand('setAmbient')"
+          ontouchend="sendCommand('setAmbient')">
+      </td>
+      <td style="text-align:right" id="sliderAmbVal">n/a</td>
+    </tr>
+    <tr id="rowBrightness">
+      <td>
+        <!-- 1) Span juste pour « Brightness » / « Luminosité » -->
+        <span data-i18n="control_brightness">Brightness</span>
+
+        <!-- 2) Bulle « ? » placée à part -->
+        <span class="tooltip"
+          data-text="Remember: When set to '0' the display and all buttons on the pump are completely dimmed out (off), but will light up for 5s when pressing a button."
+          data-i18n="[data-text]tooltip_brightness">?</span>
+      </td>
+      <td>
+        <input type="range" id="brt" min="0" max="8" step="1" value="7" onmouseup="sendCommand('setBrightness')"
+          ontouchend="sendCommand('setBrightness')">
+      </td>
+      <td style="text-align:right" id="sliderBrtVal">n/a</td>
+    </tr>
+  </table>
+
+  <table id="tableSelector" class="fixed">
+    <tr>
+      <td class="center"><span data-i18n="control_temp">Temperature</span></td>
+      <td class="center"><span data-i18n="control_ambient">Ambient Temperature</span></td>
+      <td id="brightnessHeader" class="center">
+        <!-- même principe pour la version sélecteur numérique -->
+        <span data-i18n="control_brightness">Brightness</span>
+        <span class="tooltip left"
+          data-text="Remember: When set to '0' the display and all buttons on the pump are completely dimmed out (off), but will light up for 5s when pressing a button."
+          data-i18n="[data-text]tooltip_brightness">?</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="center">
+        <div class="selector">
+          <button onclick="increaseNumber('selectorTemp'); sendCommand('setTargetSelector')"
+            class="selectorbutton selectortop">ᐱ</button>
+          <input style="display:none" type="number" id="selectorTemp" min="20" max="40" step="1" value="20"
+            class="selectorvalue" onchange="sendCommand('setTargetSelector')">
+          <div class="wrapper">
+            <span class="numDisplay"></span>
+          </div>
+          <button onclick="decreaseNumber('selectorTemp'); sendCommand('setTargetSelector')"
+            class="selectorbutton selectorbottom">ᐯ</button>
+        </div>
+      </td>
+      <td class="center">
+        <div class="selector">
+          <button onclick="increaseNumber('selectorAmb'); sendCommand('setAmbientSelector')"
+            class="selectorbutton selectortop">ᐱ</button>
+          <input style="display:none" type="number" id="selectorAmb" min="-40" max="60" step="1" value="20"
+            class="selectorvalue" onchange="sendCommand('setAmbientSelector')">
+          <div class="wrapper">
+            <span class="numDisplay"></span>
+          </div>
+          <button onclick="decreaseNumber('selectorAmb'); sendCommand('setAmbientSelector')"
+            class="selectorbutton selectorbottom">ᐯ</button>
+        </div>
+      </td>
+      <td class="center">
+        <div class="selector" id="divBrightness">
+          <button onclick="increaseNumber('selectorBrt'); sendCommand('setBrightnessSelector')"
+            class="selectorbutton selectortop">ᐱ</button>
+          <input type="number" id="selectorBrt" min="0" max="8" step="1" value="7" class="selectorvalue"
+            onchange="sendCommand('setBrightnessSelector')">
+          <button onclick="decreaseNumber('selectorBrt'); sendCommand('setBrightnessSelector')"
+            class="selectorbutton selectorbottom">ᐯ</button>
+        </div>
+      </td>
+    </tr>
+  </table>
+</section>
+
+<!-- ==================== SECTION: Buttons ==================== -->
+<section id="sectionButtons">
+  <h2 data-i18n="section_buttons_title">Buttons</h2>
+  <table class="fixed">
+    <tr>
+      <td class="right"><span data-i18n="btn_bubbles">Bubbles</span></td>
+      <td>
+        <label class="switch">
+          <input type="checkbox" id="AIR" onchange="sendCommand('toggleBubbles')">
+          <span class="slider round"></span>
+        </label>
+      </td>
+      <td class="right"><span data-i18n="btn_heater">Heater</span></td>
+      <td>
+        <label class="switch">
+          <input type="checkbox" id="HTR" onchange="sendCommand('toggleHeater')">
+          <span id="htrspan" class="slider round"></span>
+        </label>
+      </td>
+    </tr>
+    <tr>
+      <td class="right"><span data-i18n="btn_pump">Pump</span></td>
+      <td>
+        <label class="switch">
+          <input type="checkbox" id="FLT" onchange="sendCommand('togglePump')">
+          <span class="slider round"></span>
+        </label>
+      </td>
+      <td class="right"><span data-i18n="btn_unit">Unit (F/C)</span></td>
+      <td>
+        <label class="switch">
+          <input type="checkbox" id="UNT" onchange="sendCommand('toggleUnit')">
+          <span class="slider round"></span>
+        </label>
+      </td>
+    </tr>
+    <tr>
+      <td id="jets" class="right"><span data-i18n="btn_hydrojets">Hydrojets</span></td>
+      <td id="jetsswitch">
+        <label class="switch">
+          <input type="checkbox" id="HJT" onchange="sendCommand('toggleHydroJets')">
+          <span class="slider round"></span>
+        </label>
+      </td>
+      <td id="god" class="right"><span data-i18n="btn_take_control">Take control</span></td>
+      <td id="godswitch">
+        <label class="switch">
+          <input type="checkbox" id="GOD" onchange="sendCommand('toggleGodmode')">
+          <span class="slider round"></span>
+        </label>
+      </td>
+    </tr>
+  </table>
+</section>
+
+<!-- ==================== SECTION: Timer ==================== -->
+<section id="sectionTimer">
+  <h2 data-i18n="section_timer_title">Timer</h2>
+  <table>
+    <tr>
+      <td>
+        <span data-i18n="tim_label_chlorine">
+          Last chlorine add was <span id="cltimer">n/a</span> ago.
+        </span>
+      </td>
+      <td>
+        <button id="cltimerbtn" class="button" onclick="buttonConfirm(this); sendCommand('resetTimerChlorine')"
+          data-i18n="btn_reset">reset</button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span data-i18n="tim_label_filter_change">
+          Last filter change was <span id="freplacetimer">n/a</span> ago.
+        </span>
+      </td>
+      <td>
+        <button id="freplacetimerbtn" class="button"
+          onclick="buttonConfirm(this); sendCommand('resetTimerReplaceFilter')" data-i18n="btn_reset">reset</button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span data-i18n="tim_label_filter_clean">
+          Last filter clean was <span id="fcleantimer">n/a</span> ago.
+        </span>
+      </td>
+      <td>
+        <button id="fcleantimerbtn" class="button" onclick="buttonConfirm(this); sendCommand('resetTimerCleanFilter')"
+          data-i18n="btn_reset">reset</button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span data-i18n="tim_label_filter_rinse">
+          Last filter rinse was <span id="frinsetimer">n/a</span> ago.
+        </span>
+      </td>
+      <td>
+        <button id="frinsetimerbtn" class="button" onclick="buttonConfirm(this); sendCommand('resetTimerRinseFilter')"
+          data-i18n="btn_reset">reset</button>
+      </td>
+    </tr>
+  </table>
+</section>
+
+<!-- ==================== SECTION: Totals ==================== -->
+<section id="sectionTotals">
+  <h2 data-i18n="section_totals_title">Totals</h2>
+  <table class="fixed">
+    <tr>
+      <td>
+        <span data-i18n="totals_time_label">
+          Time:
+        </span>
+        <!-- Bul “?” pour “Time” -->
+        <span class="tooltip" data-text="ESP sends UTC. Browser converts to Local."
+          data-i18n="[data-text]tooltip_time">?</span>
+      </td>
+      <td><span id="time">n/a</span></td>
+    </tr>
+    <tr>
+      <td>
+        <span data-i18n="totals_ready_label">
+          Ready in:
+        </span>
+        <!-- Bul “?” pour “Ready in” -->
+        <span class="tooltip"
+          data-text="New way of estimating time to ready. Works best if given actual ambient temperature from for example HA."
+          data-i18n="[data-text]tooltip_ready">?</span>
+      </td>
+      <td><span id="t2r">n/a</span></td>
+    </tr>
+    <tr>
+      <td>
+        <span data-i18n="totals_uptime_label">
+          Uptime:
+        </span>
+        <!-- Bul “?” pour “Uptime” -->
+        <span class="tooltip"
+          data-text="Total running time of ESP since counter was reset. Rebooting will continue counting."
+          data-i18n="[data-text]tooltip_uptime">?</span>
+      </td>
+      <td><span id="uptime">n/a</span></td>
+    </tr>
+    <tr>
+      <td data-i18n="totals_pump_label">Pump:</td>
+      <td><span id="filtertime">n/a</span></td>
+    </tr>
+    <tr>
+      <td data-i18n="totals_heating_label">Heating:</td>
+      <td><span id="heatingtime">n/a</span></td>
+    </tr>
+    <tr>
+      <td data-i18n="totals_air_label">Air:</td>
+      <td><span id="airtime">n/a</span></td>
+    </tr>
+    <tr id="jetstotals">
+      <td data-i18n="totals_hydrojets_label">Hydrojets:</td>
+      <td><span id="jettime">n/a</span></td>
+    </tr>
+    <tr>
+      <td data-i18n="totals_cost_label">Estimated cost:</td>
+      <td><span id="cost">n/a</span></td>
+    </tr>
+    <tr>
+      <td colspan="2" class="center">
+        <button id="reset" class="button" onclick="resetTotals()" data-i18n="btn_reset">reset</button>
+      </td>
+    </tr>
+  </table>
+</section>
+{% endblock %}
+
+{% block footer %}
+<p class="center">
+  <span id="mqtt" data-i18n="footer_mqtt_loading">MQTT: loading status...</span><br>
+  <span id="fw" data-i18n="footer_fw_loading">Firmware: loading status...</span><br>
+  <span id="model" data-i18n="footer_model_loading">Model: loading status...</span><br>
+  <span id="rssi" data-i18n="footer_rssi_loading">RSSI: loading status...</span>
+</p>
+{% endblock %}
+
+{% block embed_scripts %}
+{% run embed_scripts('index') %}
+{% endblock %}

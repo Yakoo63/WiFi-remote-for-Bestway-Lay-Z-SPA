@@ -21,7 +21,7 @@ menu_remove=Dateien löschen
 menu_chkupdatefw=Firmware-Update prüfen
 menu_restart=ESP neu starten
 
-bouton_save=Speichern
+button_save=Speichern
 label_langue=Sprache :
 
 show_section_temp=Bereich "Temperatur" anzeigen
@@ -295,7 +295,7 @@ label_ntp_address=Domain-Name oder IP-Adresse :
 tooltip_ntpServer=Leer lassen, um pool.ntp.org zu verwenden (Standard).
 
 # "Speichern" Button
-bouton_save=Speichern
+button_save=Speichern
 
 # Bereich "WiFi-Konfiguration zurücksetzen"
 section_reset_wifi=WiFi-Konfiguration zurücksetzen :
