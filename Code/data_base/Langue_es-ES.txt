@@ -21,7 +21,7 @@ menu_remove=Eliminar archivos
 menu_chkupdatefw=Verificar actualización firmware
 menu_restart=Reiniciar ESP
 
-bouton_save=Guardar
+button_save=Guardar
 label_langue=Idioma :
 
 show_section_temp=Mostrar sección "Temperatura"
@@ -295,7 +295,7 @@ label_ntp_address=Nombre de dominio o dirección IP :
 tooltip_ntpServer=Deje vacío para usar pool.ntp.org (por defecto).
 
 # Botón "Guardar"
-bouton_save=Guardar
+button_save=Guardar
 
 # Sección "Reiniciar configuración WiFi"
 section_reset_wifi=Reiniciar configuración WiFi :

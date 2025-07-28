@@ -21,7 +21,7 @@ menu_remove=File Remover
 menu_chkupdatefw=Check firmware update
 menu_restart=Restart ESP
 
-bouton_save=Save
+button_save=Save
 label_langue=Language :
 
 show_section_temp=Show section "Temperature"

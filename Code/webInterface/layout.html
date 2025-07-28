@@ -14,7 +14,8 @@
 <body>
     <div id="site">
         <header>
-            {% block header_before_default %}{% endblock %}
+            {% block header_before_default %}
+            {% endblock %}
             {% block header_dark_mode_form %}
             <form id="darkModeForm">
                 <label class="switch">
@@ -25,7 +26,8 @@
             {% endblock %}
             <a href="./">
                 <div id="header">
-                    {% block header_headline_title %} {% endblock %}
+                    {% block header_headline_title %}
+                    {% endblock %}
                     <span data-i18n="header_module">lay-z-spa module</span>
                 </div>
             </a>
@@ -39,13 +41,16 @@
     </div>
 
     <footer>
-        {% block footer %}{% endblock %}
+        {% block footer %}
+        {% endblock %}
     </footer>
 
-    {% block after_body %}{% endblock %}
+    {% block after_body %}
+    {% endblock %}
     {% block embed_scripts_default %}
     {% run embed_scripts('function', 'i18n', 'darkmode') %}
     {% endblock %}
-    {% block embed_scripts %}{% endblock %}
+    {% block embed_scripts %}
+    {% endblock %}
 
 </body>

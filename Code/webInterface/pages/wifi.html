@@ -154,7 +154,7 @@
   <table>
     <tr>
       <td colspan="2" style="text-align:center">
-        <button id="save" class="button" onclick="saveNetworkConfig()" data-i18n="bouton_save">Enregistrer</button>
+        <button id="save" class="button" onclick="saveNetworkConfig()" data-i18n="button_save">Save</button>
       </td>
     </tr>
   </table>
@@ -174,8 +174,11 @@
 
 <!-- ==================== FOOTER: Reset WiFi Button ==================== -->
 <footer class="center">
-  <button id="resetwifi" class="button_red" onclick="resetWifi()" data-i18n="btn_reset_wifi">réinitialiser
-    WiFi</button>
+  <button id="resetwifi" class="button_red" onclick="resetWifi()" data-i18n="btn_reset_wifi">reset WiFi</button>
 </footer>
 </div>
+{% endblock %}
+
+{% block embed_scripts %}
+{% run embed_scripts('wifi') %}
 {% endblock %}
